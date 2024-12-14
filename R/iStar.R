@@ -16,8 +16,9 @@
 #' focusing on the use of market "tic data" and derived quantities that represent 
 #' proxies of the corresponding order-related variables. 
 #' 
-#' @section Market "tic data" and variables   
-#' In its most genearl setting, the model is based on market "tic data" only. 
+#' @section Market "tic data" and variables:
+#'    
+#' In its most general setting, the model is based on market "tic data" only. 
 #' It is difficult to relate Kissell's provided notion of "tic data" with respect 
 #' to current data provision standards, which in turn may also vary by data vendors. 
 #' Here should suffice to mention that an ideal market intraday dataset to input 
@@ -42,11 +43,13 @@
 #'   }
 #'   
 #'   \item{\emph{Annualized volatility}. }{
-#'   Is the standard deviation of the 
-#'   close-to-close security returns, scaled on the number of business days in a 
-#'   given year:
+#'   Is the standard deviation of the close-to-close security returns, scaled on
+#'   the number of business days in a given year:
+#'   
 #'   \deqn{\sigma = \sqrt{\frac{T_{m}}{T - 1} . \sum_{t = 2}^{T}{(r_{i} - r_{avg})^{2}}}}
+#'   
 #'   It is expressed in decimal units.
+#'   
 #'   } 
 #' 
 #'   \item{\emph{Average Daily Volume} (ADV). }{
@@ -104,7 +107,8 @@
 #'   }
 #' }
 #' 
-#' @section The I-Star model equations
+#' @section The I-Star model equations:
+#' 
 #' We start from calculating the total cost of transacting the entire order and 
 #' then distribute this quantity within single trade periods that took place.  
 #' Also, with respect to each trade period impact we can distinguish between a 
@@ -137,10 +141,12 @@
 #' The first two equations are part of the model estimation, whereas the last one
 #' is used as a measure of risk esposure for a given order. 
 #' 
-#' @section Outliers analysis
+#' @section Outliers analysis:
+#' 
 #' TODO: add outliers criteria (consistency still under discussion)
 #' 
-#' @section Data grouping procedure
+#' @section Data grouping procedure:
+#' 
 #' The grouping may be carried before procedeeding with the non-linear regression estimation.
 #' The grouping is based on buckets built with respect to three variables: the Imbalance size, 
 #' the POV and the annualized volatility. It is irrespective of the security whose values fall
@@ -157,7 +163,8 @@
 #' least squares estimation procedure, on the other it may cause convergence issues dependending 
 #' on the effective shrinkage datapoints go through.
 #' 
-#' @section Parameters estimation
+#' @section Parameters estimation:
+#' 
 #' The author suggests three methods to estimate model paramaters from the instantaneous and the 
 #' market impact equations.
 #' 
@@ -193,7 +200,8 @@
 #'   }
 #' }
 #' 
-#' @section Impact estimates, error and sensitivity analyses 
+#' @section Impact estimates, error and sensitivity analyses:
+#'  
 #' Once the parameters have been estimated, the I-Star best fit equations provide 
 #' impact costs estimates for a given market parent order specified by its size,
 #' POV, annualized volatility, side and arrival price.
@@ -227,11 +235,10 @@
 #' @param OrdData A \code{data.frame} providing custom order data specifics to estimate the impacts for, with required columns 'Side', 'Size', 'ArrPrice', 'AvgExecPrice', 'POV' and 'AnnualVol'. Or a \code{list} consisting of 'Order.Data' and 'Params' items. See 'Details'
 #' @param ... Any other passthrough parameter
 #' 
-#' @return
-#' A list whose elements depends on the chosen \code{grouping} and the usage of \code{OrdData}.
-#' It can contain:
+#' @return A list whose elements depends on the chosen \code{grouping} and the 
+#' usage of \code{OrdData}. It can contain:
 #' \describe{
-#'      \item{\code{'Rolling.Variables'}: }{A \code{list} whose elements are 'ADV', Annual.Vol', 'Arrival.Cost', 'Imb', 'Imb.Size', 'Imb.Side', 'POV' and 'VWAP' computed depending on the original \code{MktData} dataset provided and over specified \code{horizon} and \{sessions}}
+#'      \item{\code{'Rolling.Variables'}: }{A \code{list} whose elements are 'ADV', Annual.Vol', 'Arrival.Cost', 'Imb', 'Imb.Size', 'Imb.Side', 'POV' and 'VWAP' computed depending on the original \code{MktData} dataset provided and over specified \code{horizon} and \code{sessions}}
 #'      \item{\code{'Groups.Buckets'}: }{A \code{data.frame} providing the per-group imbalance size, percentage of volume and annualized volatility bounds built from provided sequences}
 #'      \item{\code{'Rolling.Variables.Groups'}: }{A \code{list} of groups compositions, by securities and their respective 'Rolling.Variables' indices}
 #'      \item{\code{'Rolling.Variables.Samples'}: }{A \code{list} of groups compositions, by securities and their respective 'Rolling.Variables' values}
@@ -321,14 +328,11 @@
 #' paramaters, perhaps those coming from the sensitivity analysis carried with 
 #' \code{iStarSensitivity}.   
 #' 
-#' 
-#' @notes
 #' TODO: stock specific analysis is a WIP (it shouldn't be hard to integrate in 
 #' function flow already in place, see it in light of further analyses such as 
 #' error analysis. Also for testing purposes other kind of data such as market 
 #' capitalization is needed)
 #' 
-#' @examples 
 #' 
 #' @export
 #'
@@ -714,7 +718,8 @@ iStarPostTrade <- function(MktData
 #' \code{paramSteps} default is 50 for \eqn{a_1}, 0.1 for \eqn{a_2} and \eqn{a_3},
 #' 0.05 for \eqn{a_4} and 0.01 for \eqn{b_1}.
 #' 
-#' @examples 
+#' @importFrom utils combn
+#' 
 #' 
 #' @export
 #' 
@@ -887,8 +892,11 @@ iStarSensitivity <- function(object
 #' # Multiple Cost Curves
 #' plot(iStarEst, fixVals = c('POV'=c(0.1,0.2,0.3,0.4,0.5), 'AnnualVol'=0.25), multiple = TRUE)
 #' 
-#' # Assuming user would like to specify their own params. Example uses params for Scenario 'All Data' from Table 5.4 in Kissell2014
-#' plot(iStarEst, fixVals = c('POV'=c(0.1,0.2,0.3,0.4,0.5), 'AnnualVol'=0.25), params = c(a_1 = 708, a_2=0.55, a_3=0.71, a_4=0.5, b_1=0.98), multiple = TRUE)
+#' # Assuming user would like to specify their own params. Example uses params for 
+#' Scenario 'All Data' from Table 5.4 in Kissell2014
+#' plot(iStarEst, fixVals = c('POV'=c(0.1,0.2,0.3,0.4,0.5), 'AnnualVol'=0.25), 
+#'      params = c(a_1 = 708, a_2=0.55, a_3=0.71, a_4=0.5, b_1=0.98), 
+#'      multiple = TRUE)
 #' } #end dontrun
 #' 
 #' @export
@@ -981,7 +989,6 @@ plot.iStarEst <- function(x
 #'
 #' @author Vito Lestingi
 #'
-#' @examples
 #'
 #' @export
 #'

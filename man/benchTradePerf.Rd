@@ -4,9 +4,16 @@
 \alias{benchTradePerf}
 \title{Trade Execution Performance Benchmarks}
 \usage{
-benchTradePerf(Portfolio, Symbol, side = 1, benchmark = c("TradeBench",
-  "MktBench", "VWAP", "PWP", "RPM"), type = list(price = c(), vwap =
-  c("interval", "full")), MktData, POV = NULL, priceToBench)
+benchTradePerf(
+  Portfolio,
+  Symbol,
+  side = 1,
+  benchmark = c("TradeBench", "MktBench", "VWAP", "PWP", "RPM"),
+  type = list(price = c(), vwap = c("interval", "full")),
+  MktData,
+  POV = NULL,
+  priceToBench
+)
 }
 \arguments{
 \item{Portfolio}{A portfolio name that points to a portfolio object structured with initPortf()}
@@ -205,8 +212,9 @@ the VWAP benchmark to use in the PnL metric computation, namely the Interval VWA
 }
 \examples{
 
-# examples consider daily data, perhaps the most common use case for the practitioners of the field
+# examples consider daily data, a common use case for practitioners in the field
 
+\donttest{
 set.seed(333)
 .blotter <- new.env()
 data(ABC)
@@ -221,14 +229,32 @@ initPortf('abc.port.day', symbols = 'ABC')
 addTxns('abc.port.day', 'ABC', TxnData = abc.trades.day)
 updatePortf('abc.port.day', 'ABC')
 
-benchTradeBench <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'TradeBench', MktData = ABC.day)
-benchMktBenchOpen <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'MktBench', type = list(price = 'Open'), MktData = ABC.day[1]) # performance against the daily open price
-benchMktBenchClose <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'MktBench', type = list(price = 'Close'), MktData = ABC.day[nrow(ABC.day)]) # performance against the daily closing price
-benchMktBench <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'MktBench', type = list(price = 'price-of-choice'), MktData = 5000)
-benchVWAPinterv <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'VWAP', type = list(vwap = 'interval'), MktData = ABC.day)
-benchVWAPfull <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'VWAP', type = list(vwap = 'full'), MktData = ABC.day)
-benchPWP <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'PWP', POV = 0.3, MktData = ABC.day)
-benchRPM <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'RPM', MktData = ABC.day)
+benchTradeBench <- benchTradePerf('abc.port.day', 'ABC', side = 1, 
+                                   benchmark = 'TradeBench', MktData = ABC.day)
+                                   
+benchMktBenchOpen <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'MktBench', 
+                                     type = list(price = 'Open'), MktData = ABC.day[1]) 
+                                     # performance against daily open price
+                                     
+benchMktBenchClose <- benchTradePerf('abc.port.day', 'ABC', side = 1, 
+                                      benchmark = 'MktBench', 
+                                      type = list(price = 'Close'), 
+                                      MktData = ABC.day[nrow(ABC.day)]) 
+                                      # performance against daily closing price
+                                      
+benchMktBench <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'MktBench', 
+                                 type = list(price = 'price-of-choice'), MktData = 5000)
+
+benchVWAPinterv <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'VWAP', 
+                                   type = list(vwap = 'interval'), MktData = ABC.day)
+                                   
+benchVWAPfull <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'VWAP', 
+                                 type = list(vwap = 'full'), MktData = ABC.day)
+                                 
+benchPWP <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'PWP', 
+                           POV = 0.3, MktData = ABC.day)
+benchRPM <- benchTradePerf('abc.port.day', 'ABC', side = 1, benchmark = 'RPM', 
+                            MktData = ABC.day)
 
 plot(benchTradeBench, benchmark = 'TradeBench')
 plot(benchMktBenchOpen, benchmark = 'MktBench')
@@ -236,6 +262,7 @@ plot(benchMktBenchClose, benchmark = 'MktBench')
 plot(benchVWAPfull, benchmark = 'VWAP')
 plot(benchPWP, benchmark = 'PWP')
 plot(benchRPM, benchmark = 'RPM')
+}
 
 }
 \references{

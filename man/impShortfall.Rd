@@ -4,8 +4,15 @@
 \alias{impShortfall}
 \title{Implementation Shortfall (IS)}
 \usage{
-impShortfall(Portfolio, Symbol, paQty, priceStart, priceEnd, arrPrice,
-  method = c("Complete", "Perold", "Wagner", "Market"))
+impShortfall(
+  Portfolio,
+  Symbol,
+  paQty,
+  priceStart,
+  priceEnd,
+  arrPrice,
+  method = c("Complete", "Perold", "Wagner", "Market")
+)
 }
 \arguments{
 \item{Portfolio}{A portfolio name that points to a portfolio object structured with initPortf()}
@@ -25,59 +32,56 @@ impShortfall(Portfolio, Symbol, paQty, priceStart, priceEnd, arrPrice,
 \value{
 Return depends on the method used.
 
-'Complete' - default, return is a \code{data.frame} containing:
+\strong{'Complete'}: Returns a \code{data.frame} containing:
+ \itemize{
+   \item \code{Symbol}: The traded symbol for which to calculate the IS
+   \item \code{Method}: The method used
+   \item \code{Paper.Ret}: The paper portfolio return
+   \item \code{Actual.Ret}: The actual portfolio return
+   \item \code{IS}: The Implementation Shortfall measure
+ }
 
-\itemize{
-  \item{\code{Symbol}: }{The traded symbol for which to calculate the IS}
-  \item{\code{Method}: }{The method used}
-  \item{\code{Paper.Ret}: }{The paper portfolio return}
-  \item{\code{Actual.Ret}: }{The actual portfolio return}
-  \item{\code{IS}: }{The Implementation Shortfall measure}
-}
-
-
-'Perold' - return is a \code{data.frame} containing:
-
-\itemize{
-  \item{\code{Symbol}: }{The traded symbol for which to calculate the IS}
-  \item{\code{Method}: }{The method used}
-  \item{\code{t.Txn.Qty}: }{The total number of transacted units}
-  \item{\code{u.Txn.Qty}: }{The number of untransacted units}
-  \item{\code{Exe.Cost}: }{The execution cost component of the IS}
-  \item{\code{Opp.Cost}: }{The Perold's opportunity cost component of the IS}
-  \item{\code{Fees}: }{The total fees paid on transactions}
-  \item{\code{Shortfall}: }{The Implementation Shortfall measure}
-}
+\strong{'Perold'}: Returns a \code{data.frame} containing:
+ \itemize{
+   \item \code{Symbol}: The traded symbol for which to calculate the IS
+   \item \code{Method}: The method used
+   \item \code{t.Txn.Qty}: The total number of transacted units
+   \item \code{u.Txn.Qty}: The number of untransacted units
+   \item \code{Exe.Cost}: The execution cost component of the IS
+   \item \code{Opp.Cost}: The Perolds opportunity cost component of the IS
+   \item \code{Fees}: The total fees paid on transactions
+   \item \code{Shortfall}: The Implementation Shortfall measure
+ }
 
 
 'Wagner' - return is a \code{data.frame} containing:
 
 \itemize{
-  \item{\code{Symbol}: }{The traded symbol for which to calculate the IS}
-  \item{\code{Method}: }{The method used}
-  \item{\code{t.Txn.Qty}: }{The total number of transacted units}
-  \item{\code{u.Txn.Qty}: }{The number of untransacted units}
-  \item{\code{Opp.Delay}: }{The opportunity delay component of the Delay cost}
-  \item{\code{Trade.Delay}: }{The trading delay component of the Delay cost}
-  \item{\code{Delay.Cost}: }{The delay related component of the IS}
-  \item{\code{Trade.Cost}: }{The trading related component of the IS}
-  \item{\code{Opp.Cost}: }{The Wagner's opportunity cost component of the IS}
-  \item{\code{Fees}: }{The total fees paid on transactions}
-  \item{\code{Shortfall}: }{The Implementation Shortfall measure}
+  \item \code{Symbol}: The traded symbol for which to calculate the IS
+  \item \code{Method}: The method used
+  \item \code{t.Txn.Qty}: The total number of transacted units
+  \item \code{u.Txn.Qty}: The number of untransacted units
+  \item \code{Opp.Delay}: The opportunity delay component of the Delay cost
+  \item \code{Trade.Delay}: The trading delay component of the Delay cost
+  \item \code{Delay.Cost}: The delay-related component of the IS
+  \item \code{Trade.Cost}: The trading-related component of the IS
+  \item \code{Opp.Cost}: The Wagner's opportunity cost component of the IS
+  \item \code{Fees}: The total fees paid on transactions
+  \item \code{Shortfall}: The Implementation Shortfall measure
 }
 
 
 'Market' - return is a \code{data.frame} containing:
 
 \itemize{
-  \item{\code{Symbol}: }{The traded symbol for which to calculate the IS}
-  \item{\code{Method}: }{The method used}
-  \item{\code{t.Txn.Qty}: }{The total number of transacted units}
-  \item{\code{u.Txn.Qty}: }{The number of untransacted units}
-  \item{\code{Trade.Cost}: }{The trading related component of the Shortafll}
-  \item{\code{Opp.Cost}: }{The Wagner's opportunity cost component of the Shortfall}
-  \item{\code{Fees}: }{The total fees paid on transactions}
-  \item{\code{Shortfall}: }{The Shortfall measure}
+  \item \code{Symbol}: The traded symbol for which to calculate the IS
+  \item \code{Method}: The method used
+  \item \code{t.Txn.Qty}: The total number of transacted units
+  \item \code{u.Txn.Qty}: The number of untransacted units
+  \item \code{Trade.Cost}: The trading-related component of the Shortfall
+  \item \code{Opp.Cost}: The Wagner's opportunity cost component of the Shortfall
+  \item \code{Fees}: The total fees paid on transactions
+  \item \code{Shortfall}: The Shortfall measure
 }
 }
 \description{
@@ -115,11 +119,14 @@ value and the value that was required to acquire the portfolio minus all fees.
 
 \deqn{Actual Portfolio Return = (\sum s_{j}) . P_{n} - \sum s_{j}p_{j} - fees}
 
-\eqn{(\sum s_{j})} represents the total number of shares in the portfolio
+\itemize{
 
-\eqn{(\sum s_{j}) . P_{n}} is the ending portfolio value
-
-\eqn{(\sum s_{j} p_{j}} is the price paid to acquire the portfolio
+  \item \eqn{ (\sum s_{j}) } represents the total number of shares in the portfolio 
+ 
+  \item \eqn{ (\sum s_{j}) . P_{n} } is the ending portfolio value  
+ 
+  \item \eqn{\sum s_{j} p_{j}} is the price paid to acquire the portfolio  
+}
 
 Implementation Shortfall can be implemented in 4 ways:
 
@@ -156,7 +163,7 @@ order arrival, alternatively Last Price at order arrival or failing that data
 availability then first transaction price) and \eqn{P_{n}} is the price at the end of
 trading. Then the Expanded IS can be written as:
 
-\deqn{(P_{n} - P_{d}) = (P_{n} - P_{0}) + (P_{0} - P_{d})}
+\deqn{(P_{n} - P_{d}) = (P_{n} - P_{0}) + (P_{0} - P_{d})} 
 
 If you substitute this price into Perold's IS, then IS can be written as:
 
@@ -189,20 +196,20 @@ test_txns <- xts(cbind(rep(10:11,5),rep(500,10),TxnFees = rep(-10,10)),
                  by = "hours"))
 colnames(test_txns) <- c("TxnPrice","TxnQty","TxnFees")
 
-stock.str='tca_test' # what are we trying it on
+stock.str='test_txns' # what are we trying it on
 currency('USD')
 stock(stock.str,currency='USD',multiplier=1)
 suppressWarnings(rm("account.testport","portfolio.testport",pos=.blotter))
 initPortf("testport", symbols=stock.str)
 initAcct("testport","testport", symbols=stock.str)
-addtxns <- addTxns("testport","tca_test",test_txns)
+addtxns <- addTxns("testport","test_txns",test_txns)
 updatePortf("testport")
 p = getPortfolio("testport") # make a local copy of the portfolio object
 a = getAccount("testport") # make a local copy of the account object
-p$symbols$tca_test$txn
+p$symbols$test_txns$txn
 
 ### Complete Execution
-shortfall("testport", "tca_test",
+impShortfall("testport", "test_txns",
           paQty=5000,
           priceStart=10,
           priceEnd=11,
@@ -210,7 +217,7 @@ shortfall("testport", "tca_test",
           method='Complete')
 
 ### Market
-shortfall("testport", "tca_test",
+impShortfall("testport", "test_txns",
           paQty=5000, 
           priceEnd=11,
           arrPrice = 10,
@@ -221,14 +228,14 @@ test_txns <- test_txns[-c(2:3),]
 suppressWarnings(rm("account.testport","portfolio.testport",pos=.blotter))
 initPortf("testport", symbols=stock.str)
 initAcct("testport","testport", symbols=stock.str)
-addtxns <- addTxns("testport","tca_test",test_txns)
+addtxns <- addTxns("testport","test_txns",test_txns)
 updatePortf("testport")
 p = getPortfolio("testport") # make a local copy of the portfolio object
 a = getAccount("testport") # make a local copy of the account object
-p$symbols$tca_test$txn
+p$symbols$test_txns$txn
 
 ### Perold
-shortfall("testport", "tca_test",
+impShortfall("testport", "test_txns",
           paQty=5000,
           priceStart=10,
           priceEnd=11,
@@ -236,7 +243,7 @@ shortfall("testport", "tca_test",
           method='Perold')
 
 ### Wagner
-shortfall("testport", "tca_test",
+impShortfall("testport", "test_txns",
           paQty=5000,
           priceStart=10,
           priceEnd=11,
